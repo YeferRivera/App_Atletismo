@@ -1,15 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Vistas;
+
+import Modelo.cls_competencia;
+import Modelo.cls_participantes;
+import java.util.LinkedList;
+import javax.swing.JOptionPane;
+
 
 /**
  *
  * @author Helpdeskgreenlad
  */
 public class frm_competencia extends javax.swing.JFrame {
-
+    LinkedList<cls_competencia> objCompetencia = new LinkedList<>();
+    LinkedList<cls_participantes> objParticipantes = new LinkedList<>();
+    boolean bln_sw_participantes;
+    int int_posicion_participantes;
     /**
      * Creates new form frm_competencia
      */
@@ -45,13 +51,17 @@ public class frm_competencia extends javax.swing.JFrame {
         btn_Consultar = new javax.swing.JButton();
         btn_Guardar = new javax.swing.JButton();
         btn_Nuevo = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        lbl_Estado = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 51, 51));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Formulario de administracion de la competencia");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -77,6 +87,7 @@ public class frm_competencia extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel3.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Participantes");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -113,12 +124,31 @@ public class frm_competencia extends javax.swing.JFrame {
 
         btn_Consultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/consulta.png"))); // NOI18N
         btn_Consultar.setText("Consultar");
+        btn_Consultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ConsultarActionPerformed(evt);
+            }
+        });
 
         btn_Guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disco-flexible.png"))); // NOI18N
         btn_Guardar.setText("Guardar");
+        btn_Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_GuardarActionPerformed(evt);
+            }
+        });
 
         btn_Nuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/nuevo-archivo.png"))); // NOI18N
         btn_Nuevo.setText("Nuevo");
+        btn_Nuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_NuevoActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("     Estado");
+
+        lbl_Estado.setText("--");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -152,7 +182,11 @@ public class frm_competencia extends javax.swing.JFrame {
                             .addComponent(txt_Nombre)
                             .addComponent(txt_Edad)
                             .addComponent(txt_Contacto)
-                            .addComponent(cbx_Nivel, 0, 221, Short.MAX_VALUE))))
+                            .addComponent(cbx_Nivel, 0, 221, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lbl_Estado, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(85, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -186,7 +220,11 @@ public class frm_competencia extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addComponent(txt_Contacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(lbl_Estado))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -212,6 +250,55 @@ public class frm_competencia extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_NuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_NuevoActionPerformed
+        txt_Contacto.setText("");
+        txt_Edad.setText("");
+        txt_Id.setText("");
+        txt_Nombre.setText("");
+        cbx_Nivel.setSelectedIndex(0);
+        txt_Id.requestFocus();
+    }//GEN-LAST:event_btn_NuevoActionPerformed
+
+    private void btn_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GuardarActionPerformed
+       if(Integer.parseInt(txt_Edad.getText())>=18){
+        int int_pos = objParticipantes.size();
+        objParticipantes.add(new cls_participantes(
+        txt_Id.getText(),
+        txt_Nombre.getText(),
+        Integer.parseInt(txt_Edad.getText()),
+        (String)cbx_Nivel.getSelectedItem(),
+        txt_Contacto.getText()));
+        JOptionPane.showMessageDialog(null,"Participante registrado"+"Con exito","Guardar", JOptionPane.INFORMATION_MESSAGE);
+        objParticipantes.get(int_pos).setInt_estado(1);
+       }else{
+           JOptionPane.showMessageDialog(null,"No cumples con la edad"+"Requerida","Guardar",
+                   JOptionPane.ERROR_MESSAGE);
+       }
+        
+    }//GEN-LAST:event_btn_GuardarActionPerformed
+
+    private void btn_ConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ConsultarActionPerformed
+        int_posicion_participantes = 0;
+        bln_sw_participantes = false;
+        for(int i=0;i<objParticipantes.size();i ++){
+            if(txt_Id.getText().equals(objParticipantes.get(i).getStr_id())){
+                bln_sw_participantes= true;
+                int_posicion_participantes=i;
+                break;
+            }
+        }
+        if(bln_sw_participantes==false){
+            JOptionPane.showMessageDialog(null, "No se encontraron "+
+                    "Registros", "Consultar", JOptionPane.ERROR_MESSAGE);
+        }else{
+            txt_Contacto.setText(objParticipantes.get(int_posicion_participantes).getStr_contacto());
+            txt_Edad.setText(""+objParticipantes.get(int_posicion_participantes).getInt_edad());
+            txt_Nombre.setText(objParticipantes.get(int_posicion_participantes).getStr_nombre());
+            cbx_Nivel.setSelectedItem(""+objParticipantes.get(int_posicion_participantes).getStr_nivel());
+            lbl_Estado.setText(""+objParticipantes.get(int_posicion_participantes).getInt_estado());
+        }
+    }//GEN-LAST:event_btn_ConsultarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -261,9 +348,11 @@ public class frm_competencia extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lbl_Estado;
     private javax.swing.JTextField txt_Contacto;
     private javax.swing.JTextField txt_Edad;
     private javax.swing.JTextField txt_Id;
